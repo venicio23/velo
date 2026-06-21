@@ -1,4 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { generateOrderCode } from '../support/helpers';
+
+const orderCode = generateOrderCode();
+console.log(orderCode); // Ex.: VLO-GIU6SK
 
 test('Deve consultar um pedido aprovado', async ({ page }) => {
   //Test Data
@@ -17,17 +21,17 @@ test('Deve consultar um pedido aprovado', async ({ page }) => {
 
   //Assert
   const containerPedido = page.getByRole('paragraph')
-  .filter({ hasText: /^Pedido$/ })
-  .locator('..'); //Sobe para o elemento pai do texto "Pedido"
+    .filter({ hasText: /^Pedido$/ })
+    .locator('..'); //Sobe para o elemento pai do texto "Pedido"
 
-  await expect(containerPedido).toContainText(orderCode, { timeout: 10000 }	);  
+  await expect(containerPedido).toContainText(orderCode, { timeout: 10000 });
 
   await expect(page.getByText('APROVADO')).toBeVisible();
 
 });
 
 test('Deve exibir mensagem de erro ao buscar um pedido não encontrado', async ({ page }) => {
-  const orderCode =  'VLO-ABC123';
+  const orderCode = generateOrderCode();
 
   await page.goto('http://localhost:5173/');
   await expect(page.getByTestId('hero-section').getByRole('heading')).toContainText('Velô Sprint');
@@ -43,5 +47,5 @@ test('Deve exibir mensagem de erro ao buscar um pedido não encontrado', async (
     - heading "Pedido não encontrado" [level=3]
     - paragraph: Verifique o número do pedido e tente novamente
     `);
-  
+
 })
