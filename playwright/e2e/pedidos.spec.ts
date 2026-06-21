@@ -38,10 +38,10 @@ test('Deve exibir mensagem de erro ao buscar um pedido não encontrado', async (
   await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(orderCode);
   await page.getByRole('button', { name: 'Buscar Pedido' }).click();
 
-  const title = page.getByRole('heading', { name: 'Pedido não encontrado' });
-  await expect(title).toBeVisible();
-
-  const message = page.locator('p', { hasText: 'Verifique o número do pedido e tente novamente' });
-  await expect(message).toBeVisible();
+  await expect(page.locator('#root')).toMatchAriaSnapshot(`
+    - img
+    - heading "Pedido não encontrado" [level=3]
+    - paragraph: Verifique o número do pedido e tente novamente
+    `);
   
 })
